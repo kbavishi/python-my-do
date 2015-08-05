@@ -4,6 +4,7 @@ import datetime
 import json
 import os
 import time
+import DisplayStrings
 from flask import Flask, request
 from anydo.api import AnyDoAPI
 
@@ -23,13 +24,11 @@ def addTask():
 
     # Verify that key arguments were provided
     if not request.json.get( "key" ):
-      return "Key not provided"
+      return DisplayStrings.KEY_NOT_PROVIDED_ERROR
     if not validLogin( request.json.get( "key" ) ):
-      return "Invalid login"
+      return DisplayStrings.INVALID_KEY_ERROR
     if not request.json.get( "task_name" ):
-       return "Task name not provided"
-
-    text = "New task being added!\n"
+       return DisplayStrings.NO_TASK_NAME_ERROR
 
     # Login with the Any.Do credentials
     anyDoUsername = os.environ.get( "ANY_DO_USERNAME", "" )
@@ -48,9 +47,12 @@ def addTask():
       due_day = datetime.datetime.fromtimestamp( time.mktime( date_struct_time ) )
 
     # Create the task
-    api.create_new_task( request.json.get( "task_name" ), due_day=due_day )
-
-    return text
+    try:
+      api.create_new_task( request.json.get( "task_name" ), due_day=due_day )
+      return DisplayStrings.TASK_ADD_SUCCESSFUL
+    except:
+      # Failed for some reason
+      return DisplayStrings.TASK_ADD_FAILED
 
 if __name__ == "__main__":
     port = int( os.environ.get( "PORT", 5000 ) )
