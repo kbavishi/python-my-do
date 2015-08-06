@@ -94,8 +94,18 @@ def noTaskNameProvidedError():
     del payload[ 'task_name' ]
     r = requests.post( "http://localhost:5000/add_task",
                        data=json.dumps(payload), headers=headers )
-    import pdb; pdb.set_trace()
     assert DisplayStrings.NO_TASK_NAME_ERROR in r.content
+
+def invalidDueDateProvidedTest():
+    """
+    Verifies that if due date is provided in an invalid format, the server
+    returns an error.
+    """
+    payload = ideal_payload.copy()
+    payload[ 'due_date' ] = 'Random unparsable date'
+    r = requests.post( "http://localhost:5000/add_task",
+                       data=json.dumps(payload), headers=headers )
+    assert DisplayStrings.INVALID_DATE_FORMAT_ERROR in r.content
 
 def setupEnv():
     """Reads from .env file and sets up environment"""
@@ -117,5 +127,6 @@ if __name__ == '__main__':
     keyNotProvidedTest()
     invalidKeyProvidedTest()
     noTaskNameProvidedError()
+    invalidDueDateProvidedTest()
     requestPassTest()
     cleanupDummyTask()

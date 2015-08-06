@@ -42,7 +42,10 @@ def addTask():
         # Expected to be in a certain format. Eg: November 21, 2006 at 04:30PM
         dateFormat = "%B %d, %Y at %I:%M%p"
         # Convert to struct_time
-        date_struct_time = time.strptime( request.json[ "due_date" ], dateFormat )
+        try:
+            date_struct_time = time.strptime( request.json[ "due_date" ], dateFormat )
+        except ValueError:
+            return DisplayStrings.INVALID_DATE_FORMAT_ERROR
         # Convert from struct_time to datetime
         due_day = datetime.datetime.fromtimestamp( time.mktime( date_struct_time ) )
 
