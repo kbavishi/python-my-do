@@ -15,7 +15,9 @@ Add IFTTT recipes to:
 
 ## Requirements
 
-Run ```setup.py``` before trying to deploy the server. It will ask for your Any.do credentials and a key to help identify your IFTTT recipe. The IFTTT key is needed so that your server is not exposed to unauthorized requests.
+Run ```setup.py``` before trying to deploy the server.
+
+It will ask for your Any.do credentials and a key to help identify your IFTTT recipe. The IFTTT key is needed so that your server is not exposed to unauthorized requests.
 
 ## Setup instructions
 
